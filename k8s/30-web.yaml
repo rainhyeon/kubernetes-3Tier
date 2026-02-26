@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: web
-          image: rainhyeon/three-tier-web:v1
+          image: rainhyeon/three-tier-web:v3
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
