@@ -1,6 +1,26 @@
 # kuberenete-3Tier 구축
-쿠버네티스에 배포할 3Tier 구축
 
+[파일 구성도]
+```
+controlplane:~/kubernetes-3Tier$ tree
+.
+|-- README.md
+|-- k8s
+|   |-- 00-namespace.yaml    # namespace 생성 파일
+|   |-- 10-db.yaml           # DB(Secret, Deployment, Service) - 5432
+|   |-- 20-was.yaml          # WAS(ConfigMap, Deployment, Service) - 8080
+|   `-- 30-web.yaml          # WEB(Deployment, Service) - 80
+|-- was
+|   |-- Dockerfile           # python 환경에서 빌드
+|   |-- app.py               # Flask API
+|   `-- requirements.txt     # 의존성 패키지 목록
+`-- web 
+    |-- Dockerfile           # nginx 빌드
+    |-- default.conf         # proxypass 설정파일
+    `-- index.html           # 웹 정적파일
+
+4 directories, 11 files
+```
 
 ## 1. Docker build
 ```
@@ -220,22 +240,6 @@ Pod A에서 다음 명령을 실행한다.
 ```bash
 curl http://web/api/ping
 ```
-
-통신 경로:
-
-```
-Pod A 
-  → WEB Service 
-  → WEB Pod 
-  → WAS Service 
-  → WAS Pod 
-  → DB Service 
-  → DB Pod
-```
-
-이 문서는 해당 과정에서 **iptables가 어떤 순서로 동작하는지**를 설명한다.
-
----
 
 # 1️⃣ 전체 네트워크 흐름 개요
 
